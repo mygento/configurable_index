@@ -1,0 +1,9 @@
+<?xml version="1.0" ?>
+<config>
+    <modules>
+        <Mygento_ConfIndex>
+            <active>true</active>
+            <codePool>community</codePool>
+        </Mygento_ConfIndex>
+    </modules>
+</config>

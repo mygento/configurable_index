@@ -1,0 +1,11 @@
+app/code/local/Mygento/DPD app/code/local/Mygento/DPD
+app/design/adminhtml/default/default/layout/mygento/dpd.xml app/design/adminhtml/default/default/layout/mygento/dpd.xml
+app/design/adminhtml/default/default/template/mygento/dpd app/design/adminhtml/default/default/template/mygento/dpd
+app/design/frontend/base/default/layout/mygento/dpd.xml app/design/frontend/base/default/layout/mygento/dpd.xml
+app/locale/ru_RU/Mygento_DPD.csv app/locale/ru_RU/Mygento_DPD.csv
+js/jquerylib/jqueryui js/jquerylib/jqueryui
+js/jquerylib/jquery-1.6.4.min.js js/jquerylib/jquery-1.6.4.min.js
+js/jquerylib/mygento/jquery.init.js js/jquerylib/mygento/jquery.init.js
+js/dpd.js js/dpd.js
+skin/frontend/base/default/js/dpd.js skin/frontend/base/default/js/dpd.js
+app/etc/modules/Mygento_DPD.xml app/etc/modules/Mygento_DPD.xml

@@ -1,0 +1,28 @@
+{
+    "name": "mygento/configurable_index",
+    "type": "magento-module",
+    "license": "proprietary",
+    "homepage": "https://github.com/mygento/configurable_index",
+    "description": "Configurable stock index module",
+    "require": {
+        "magento-hackathon/magento-composer-installer": "*"
+    },
+    "require-dev": {
+        "squizlabs/php_codesniffer": "2.*",
+        "magento-ecg/coding-standard": "dev-master",
+        "sebastian/phpdcd": "*",
+        "sebastian/phpcpd": "*",
+        "jakub-onderka/php-parallel-lint": "0.*",
+        "jakub-onderka/php-console-highlighter": "0.*",
+        "phpmd/phpmd": "@stable"
+    },
+    "repositories": [
+        {
+            "type": "git",
+            "url": "https://github.com/mygento/configurable_index.git"
+        }
+    ],
+    "extra": {
+        "magento-root-dir": "."
+    }
+}
