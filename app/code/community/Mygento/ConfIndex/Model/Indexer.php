@@ -112,7 +112,7 @@ class Mygento_ConfIndex_Model_Indexer extends Mage_Index_Model_Indexer_Abstract
         }
     }
 
-    public function reindexAll($product_ids = null)
+    public function reindexAll()
     {
         $attr = Mage::getStoreConfig('confindex/general/attribute');
 
@@ -121,11 +121,8 @@ class Mygento_ConfIndex_Model_Indexer extends Mage_Index_Model_Indexer_Abstract
         }
 
         $write = Mage::getSingleton('core/resource')->getConnection('core_write');
-        if ($product_ids) {
-            
-        }
+        
         $attribute = Mage::getModel('catalog/product')->getResource()->getAttribute($attr);
-        //print_r($attribute->getData());
 
         $attr_id = $attribute->getAttributeId();
 
