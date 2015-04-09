@@ -121,7 +121,7 @@ class Mygento_ConfIndex_Model_Indexer extends Mage_Index_Model_Indexer_Abstract
         }
 
         $write = Mage::getSingleton('core/resource')->getConnection('core_write');
-        
+
         $attribute = Mage::getModel('catalog/product')->getResource()->getAttribute($attr);
 
         $attr_id = $attribute->getAttributeId();
@@ -144,6 +144,39 @@ class Mygento_ConfIndex_Model_Indexer extends Mage_Index_Model_Indexer_Abstract
 
         $query = $write->insertFromSelect($select, $attr_table, array('entity_type_id', 'attribute_id', 'store_id', 'value', 'entity_id'), Varien_Db_Adapter_Interface::INSERT_ON_DUPLICATE);
         $result = $write->query($query);
+
+        $attr2 = Mage::getStoreConfig('confindex/general/attribute2');
+
+        if (!($attr2) || 0 === $attr2 || !(is_string($attr2))) {
+            return;
+        }
+
+
+        $attribute2 = Mage::getModel('catalog/product')->getResource()->getAttribute($attr2);
+
+
+        $attr2_id = $attribute2->getAttributeId();
+
+        $attr2_entity = $attribute2->getEntityTypeId();
+        $attr2_table = $attribute2->getBackendTable();
+
+        $select2 = $write->select()
+                ->from(array('l' => Mage::getSingleton('core/resource')->getTableName('catalog/product_link')), array(
+                    new Zend_Db_Expr($attr2_entity.' as `entity_type_id`'),
+                    new Zend_Db_Expr($attr2_id.' as `attribute_id`'),
+                    new Zend_Db_Expr(Mage::app()->getStore()->getStoreId().' as `store_id`'),
+                    'entity_id' => 'l.product_id',
+                    new Zend_Db_Expr('cast(sum(`v`.`value`) AS UNSIGNED) as `value`'),
+                        )
+                )
+                ->join(array('v' => $attr_table), 'l.linked_product_id = v.entity_id', array())
+                ->where('`l`.`link_type_id` = 4')
+                ->where('`v`.`attribute_id` = '.$attr_id)
+                ->group('l.product_id')
+        ;
+        //echo $select->__toString()."\n";
+        $query2 = $write->insertFromSelect($select2, $attr2_table, array('entity_type_id', 'attribute_id', 'store_id', 'entity_id', 'value'), Varien_Db_Adapter_Interface::INSERT_ON_DUPLICATE);
+        $result2 = $write->query($query2);
     }
 
 }
