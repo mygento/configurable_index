@@ -62,6 +62,26 @@
                             <show_in_store>1</show_in_store>
                             <comment>attribute to fill with values</comment>
                         </attribute2>
+                        <attribute3 translate="label comment">
+                            <label>Attribute for Rating</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>confindex/source_list</source_model>
+                            <sort_order>12</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                            <comment>attribute to fill with values</comment>
+                        </attribute3>
+                        <attribute4 translate="label comment">
+                            <label>Attribute for Popular</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>confindex/source_list</source_model>
+                            <sort_order>13</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                            <comment>attribute to source as values</comment>
+                        </attribute4>
                     </fields>
                 </general>
             </groups>

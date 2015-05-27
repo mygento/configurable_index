@@ -18,7 +18,7 @@ class Mygento_ConfIndex_Block_Version extends Mage_Adminhtml_Block_Abstract impl
         }
 
         $info = '<fieldset class="config'.(!$data->result ? ' success-msg' : ' error-msg').'" style="padding-left:30px;" ><img src="//www.mygento.ru/media/favicon/default/favicon.png" width="16" height="16" />
-            '.Mage::helper($this->_name)->__('DPD shipping version: %s', Mage::getConfig()->getNode('modules/'.$this->_full.'/version'));
+            '.Mage::helper($this->_name)->__('Conf Index version: %s', Mage::getConfig()->getNode('modules/'.$this->_full.'/version'));
 
         $info.='<a style="float:right" target="_blank" href="'.$this->_url.'">'.($data->result ? $this->__('Check for update').' ['.$data->version.']' : $this->__('Module page')).'</a></fieldset>';
         return $info;

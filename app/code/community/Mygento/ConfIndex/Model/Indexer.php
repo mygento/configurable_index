@@ -130,20 +130,24 @@ class Mygento_ConfIndex_Model_Indexer extends Mage_Index_Model_Indexer_Abstract
         $attr_table = $attribute->getBackendTable();
 
         $select = $write->select()
-                ->from(array('s' => Mage::getSingleton('core/resource')->getTableName('cataloginventory/stock_status')), array(
-                    new Zend_Db_Expr($attr_entity.' as `entity_type_id`'),
-                    new Zend_Db_Expr($attr_id.' as `attribute_id`'),
-                    new Zend_Db_Expr(Mage::app()->getStore()->getStoreId().' as `store_id`'),
-                    new Zend_Db_Expr('cast(sum(`s`.`qty`) AS UNSIGNED) as `value`'),
-                        )
+            ->from(array('s' => Mage::getSingleton('core/resource')->getTableName('cataloginventory/stock_status')), array(
+                new Zend_Db_Expr($attr_entity . ' as `entity_type_id`'),
+                new Zend_Db_Expr($attr_id . ' as `attribute_id`'),
+                new Zend_Db_Expr(Mage::app()->getStore()->getStoreId() . ' as `store_id`'),
+                new Zend_Db_Expr('cast(sum(`s`.`qty`) AS UNSIGNED) as `value`'),
                 )
-                ->join(array('r' => Mage::getSingleton('core/resource')->getTableName('catalog/product_relation')), 's.product_id = r.child_id', array('entity_id' => 'parent_id'))
-                ->group('r.parent_id');
+            )
+            ->join(array('r' => Mage::getSingleton('core/resource')->getTableName('catalog/product_relation')), 's.product_id = r.child_id', array('entity_id' => 'parent_id'))
+            ->group('r.parent_id');
 
         //echo $select->__toString()."\n";
+        //die();
 
         $query = $write->insertFromSelect($select, $attr_table, array('entity_type_id', 'attribute_id', 'store_id', 'value', 'entity_id'), Varien_Db_Adapter_Interface::INSERT_ON_DUPLICATE);
         $result = $write->query($query);
+
+
+
 
         $attr2 = Mage::getStoreConfig('confindex/general/attribute2');
 
@@ -161,22 +165,73 @@ class Mygento_ConfIndex_Model_Indexer extends Mage_Index_Model_Indexer_Abstract
         $attr2_table = $attribute2->getBackendTable();
 
         $select2 = $write->select()
-                ->from(array('l' => Mage::getSingleton('core/resource')->getTableName('catalog/product_link')), array(
-                    new Zend_Db_Expr($attr2_entity.' as `entity_type_id`'),
-                    new Zend_Db_Expr($attr2_id.' as `attribute_id`'),
-                    new Zend_Db_Expr(Mage::app()->getStore()->getStoreId().' as `store_id`'),
-                    'entity_id' => 'l.product_id',
-                    new Zend_Db_Expr('cast(sum(`v`.`value`) AS UNSIGNED) as `value`'),
-                        )
+            ->from(array('l' => Mage::getSingleton('core/resource')->getTableName('catalog/product_link')), array(
+                new Zend_Db_Expr($attr2_entity . ' as `entity_type_id`'),
+                new Zend_Db_Expr($attr2_id . ' as `attribute_id`'),
+                new Zend_Db_Expr(Mage::app()->getStore()->getStoreId() . ' as `store_id`'),
+                'entity_id' => 'l.product_id',
+                new Zend_Db_Expr('cast(sum(`v`.`value`) AS UNSIGNED) as `value`'),
                 )
-                ->join(array('v' => $attr_table), 'l.linked_product_id = v.entity_id', array())
-                ->where('`l`.`link_type_id` = 4')
-                ->where('`v`.`attribute_id` = '.$attr_id)
-                ->group('l.product_id')
+            )
+            ->join(array('v' => $attr_table), 'l.linked_product_id = v.entity_id', array())
+            ->where('`l`.`link_type_id` = 4')
+            ->where('`v`.`attribute_id` = ' . $attr_id)
+            ->group('l.product_id')
         ;
-        //echo $select->__toString()."\n";
+        //echo $select2->__toString()."\n";
+        //die();
         $query2 = $write->insertFromSelect($select2, $attr2_table, array('entity_type_id', 'attribute_id', 'store_id', 'entity_id', 'value'), Varien_Db_Adapter_Interface::INSERT_ON_DUPLICATE);
         $result2 = $write->query($query2);
-    }
 
+
+
+
+
+        $attr3 = Mage::getStoreConfig('confindex/general/attribute3');
+
+        if (!($attr3) || 0 === $attr3 || !(is_string($attr3))) {
+            return;
+        }
+
+        $attribute3 = Mage::getModel('catalog/product')->getResource()->getAttribute($attr3);
+
+        $attr3_id = $attribute3->getAttributeId();
+
+        $attr3_entity = $attribute3->getEntityTypeId();
+        $attr3_table = $attribute3->getBackendTable();
+
+        $attr4 = Mage::getStoreConfig('confindex/general/attribute4');
+
+        if (!($attr4) || 0 === $attr4 || !(is_string($attr4))) {
+            return;
+        }
+
+        $attribute4 = Mage::getModel('catalog/product')->getResource()->getAttribute($attr4);
+
+        $attr4_id = $attribute4->getAttributeId();
+
+        $attr4_entity = $attribute4->getEntityTypeId();
+        $attr4_table = $attribute4->getBackendTable();
+
+
+        $select3 = $write->select()
+            ->from(array('p' => Mage::getSingleton('core/resource')->getTableName('catalog/product')), array(
+                new Zend_Db_Expr($attr3_entity . ' as `entity_type_id`'),
+                new Zend_Db_Expr($attr3_id . ' as `attribute_id`'),
+                new Zend_Db_Expr(Mage::app()->getStore()->getStoreId() . ' as `store_id`'),
+                'entity_id',
+                new Zend_Db_Expr('IF ((`at1`.`value` + `at2`.`value`) > 0, `at4`.`value` + 50, `at4`.`value` ) as `value`'),
+            ))
+            ->join(array('at1' => $attr_table), 'p.entity_id = at1.entity_id', array())
+            ->join(array('at2' => $attr2_table), 'p.entity_id = at2.entity_id', array())
+            ->join(array('at4' => $attr4_table), 'p.entity_id = at4.entity_id', array())
+            ->where('`at1`.`attribute_id` = ' . $attr_id)
+            ->where('`at2`.`attribute_id` = ' . $attr2_id)
+            ->where('`at4`.`attribute_id` = ' . $attr4_id)
+        ;
+        //echo $select3->__toString() . "\n";
+        //die();
+        $query3 = $write->insertFromSelect($select3, $attr3_table, array('entity_type_id', 'attribute_id', 'store_id', 'entity_id', 'value'), Varien_Db_Adapter_Interface::INSERT_ON_DUPLICATE);
+        $result3 = $write->query($query3);
+    }
 }

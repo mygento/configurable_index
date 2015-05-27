@@ -11,6 +11,11 @@
                 <confindex>
                     <model>confindex/indexer</model>
                 </confindex>
+                <catalog_product_flat>
+                    <depends>
+                        <confindex/>
+                    </depends>
+                </catalog_product_flat>
                 <cataloginventory_stock>
                     <depends>
                         <confindex/>
